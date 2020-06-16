@@ -1,0 +1,9 @@
+wget -c http://ghtorrent-downloads.ewi.tudelft.nl/mysql/mysql-2015-09-25.tar.gz
+tar -xvzf mysql-2015-09-25.tar.gz
+aws s3 cp mysql-2015-09-25 s3://github-stackoverflow-analysis-project/data-file/testing/ --recursive
+
+#2019 tar file contains 102.973GB compressed and  353.1 GB decompressed
+
+wget -c http://ghtorrent-downloads.ewi.tudelft.nl/mysql/mysql-2019-06-01.tar.gz
+tar -xvzf mysql-2019-06-01.tar.gz
+aws s3 cp mysql-2019-06-01 s3://github-stackoverflow-analysis-project/data-file/mysql-2019-06-01/ --recursive
