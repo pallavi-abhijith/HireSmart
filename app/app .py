@@ -9,17 +9,18 @@ import dash_core_components as dcc
 from dash.dependencies import Input, Output
 
 #Initializers
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-HireSmart_colors = {'background': '#212121ff', 'text': '#ffab40'}
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css'] 
+HireSmart_colors = {'background': 'Blue', 'text': '#ffab40'}
+#212121ff
 server = flask.Flask(__name__)
 content = Content()
 queries = Queries()
 overall_scode = 0
 
-languages=queries.run_custom_query("SELECT language FROM user1 ORDER BY language asc")
+languages=queries.run_custom_query("SELECT language FROM projects1 ORDER BY language asc")
 language_indicator=languages['language'].unique()
-cities = queries.run_custom_query("SELECT city FROM user1 ORDER BY city asc")
-city_indicator = cities['city'].unique()
+cities = queries.run_custom_query("SELECT location FROM user1 ORDER BY location asc")
+city_indicator = cities['location'].unique()
 #random_users = queries.run_custom_query("SELECT name FROM user1 limit 5")
 
 @server.route('/api')
@@ -40,7 +41,8 @@ app = dash.Dash(
 
 app.layout = html.Div(children=[
     #Header
-    html.H1('HireSmart',style={'text-align': 'center', 'padding': '10px', 'background':HireSmart_colors['background'],'color':HireSmart_colors['text']}),
+    html.H1('HireSmart',style={'text-align': 'center', 'color':HireSmart_colors['text']}),
+    #'padding': '10px', 'background':HireSmart_colors['background'],
 
     html.Div([
         html.Div([
@@ -69,7 +71,7 @@ app.layout = html.Div(children=[
             html.Div(id='my-div')],
             style={'width': '70%', 'padding': '1%',  'background': '#d3d3d3', 'border-radius': '10px', 'margin-right': '2%'},
             ),
-    ],style={'width': '100%', 'padding': '1%',  'border-radius': '10px', 'margin-right': '2%', 'display':'flex'}),
+    ],style={'width': '60%', 'padding': '1%',  'border-radius': '10px', 'margin-right': '2%', 'display':'flex'}),
     
     html.Div([
         html.Div([
@@ -80,9 +82,9 @@ app.layout = html.Div(children=[
                 type='text',
             )],style={'width': '20%', 'margin-right': '15px'}),
         html.Button('Search', style={'background-color': '#a4c2f4'},  id='search'),
-        html.Hr(),
-        html.Div(id="input-name-output1"),
     ],style={'margin-right': '4%', 'margin-left': '2%', 'width': '100%', 'display':'flex'}),
+    html.Hr(),
+    html.Div(id="input-name-output1"),
 ])
 @app.callback(
         Output('input-name-output', 'children'),
@@ -119,5 +121,3 @@ def genearte_report(search, user_name):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
-
