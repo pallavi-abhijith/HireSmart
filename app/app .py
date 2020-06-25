@@ -58,10 +58,10 @@ app.layout = html.Div(children=[
             )
         ],style={'width': '20%', 'margin-right': '15px'}),
         html.Button('Submit', style={'background-color': '#a4c2f4'},  id='button'),
-    ], style={'margin-right': '4%', 'margin-left': '2%', 'width': '100%', 'display':'flex'}),
+    ],style={'margin-right': '4%', 'margin-left': '2%', 'width': '100%', 'display':'flex'}),
     html.Hr(),
     html.Div(id="input-name-output"),
-     
+
     # table with project information
     html.Div([
         html.Div([
@@ -70,8 +70,20 @@ app.layout = html.Div(children=[
             style={'width': '70%', 'padding': '1%',  'background': '#d3d3d3', 'border-radius': '10px', 'margin-right': '2%'},
             ),
     ],style={'width': '100%', 'padding': '1%',  'border-radius': '10px', 'margin-right': '2%', 'display':'flex'}),
+    
+    html.Div([
+        html.Div([
+            dcc.Input(
+                style={'width': '100%'},
+                id='input-box',
+                placeholder='Enter a user name to view more details',
+                type='text',
+            )],style={'width': '20%', 'margin-right': '15px'}),
+        html.Button('Search', style={'background-color': '#a4c2f4'},  id='search'),
+        html.Hr(),
+        html.Div(id="input-name-output1"),
+    ],style={'margin-right': '4%', 'margin-left': '2%', 'width': '100%', 'display':'flex'}),
 ])
-
 @app.callback(
         Output('input-name-output', 'children'),
         [dash.dependencies.Input('button', 'n_clicks'),
@@ -81,16 +93,28 @@ app.layout = html.Div(children=[
 
 # if inputs such as button being clicked ouccrs, then this method will take in the parameters
 # and use them to calculate the overall score, commit percentile, and byte percentile for the user
-def update_output_div(n_clicks, language, city):
+def update_output_div(button, language, city):
     #if(user_name==None):
     #    return "0.0%", "0.0%", "0.0%", "User does not currently exit in database"
     if(language == None):
-        return "0.0%", "0.0%", "User does not select the language"
+        return "User does not select the language"
     elif(city == None):
-        return "0.0%", "0.0%", "User does not select the city"
+        return "User does not select the city"
     else:
         print(language,city)
         df=queries.city_language(language, city)
+        return content.generate_table(df)
+
+@app.callback(
+    Output('input-name-output1', 'children'),
+    [dash.dependencies.Input('search','n_clicks'),
+        dash.dependencies.Input('input-box','value')]
+    )
+def genearte_report(search, user_name):
+    if(user_name==None):
+        return "User name does not exist"
+    else:
+        df=queries.user(user_name)
         return content.generate_table(df)
 
 if __name__ == '__main__':
